@@ -40,7 +40,7 @@ services:
       dockerfile: Dockerfile
     networks:
       - app
-      -
+
   postgres:
     container_name: app_postgres
     restart: unless-stopped
