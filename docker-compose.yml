@@ -58,3 +58,7 @@ services:
 networks:
   app:
     driver: bridge
+
+volumes:
+  pgsql-volume:
+    driver: local
