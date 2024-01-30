@@ -29,7 +29,7 @@ services:
     ports:
       - "5000:5000"
     volumes:
-      - ./flask:/var/www/app/flask
+      - ./flask:/var/www/app
     networks:
       - app
   vue:
