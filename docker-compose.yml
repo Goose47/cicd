@@ -1,0 +1,60 @@
+version: '3'
+services:
+
+  nginx:
+    image: nginx:alpine
+    container_name: app_nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/conf.d/:/etc/nginx/conf.d/
+    networks:
+      - app
+
+  certbot:
+    image: certbot/certbot
+    container_name: app_certbot
+    volumes:
+      - ./certbot/conf:/etc/letsencrypt
+      - ./certbot/www:/var/www/certbot
+
+  flask:
+    container_name: app_flask
+    restart: unless-stopped
+    build:
+      context: ./flask
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./flask:/var/www/app/flask
+    networks:
+      - app
+  vue:
+    container_name: app_vue
+    restart: unless-stopped
+    build:
+      context: ./vue
+      dockerfile: Dockerfile
+    networks:
+      - app
+      -
+  postgres:
+    container_name: app_postgres
+    restart: unless-stopped
+    image: postgres:14
+    ports:
+      - "5432:5432"
+    env_file:
+      - ./pgsql/.env
+    volumes:
+      - pgsql-volume:/var/lib/postgresql/data
+    networks:
+      - app
+
+
+networks:
+  app:
+    driver: bridge
