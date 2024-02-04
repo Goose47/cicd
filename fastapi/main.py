@@ -16,7 +16,7 @@ async def validate_post_data(data: dict) -> bool:
     if not data.get('name') or not isinstance(data['name'], str):
         raise ValidationException('name field is required and must be of type string')
     if data.get('age') and not isinstance(data['age'], int):
-        raise ValidationException('age field is required and must be of type int')
+        raise ValidationException('age field must be of type int')
     return True
 
 
@@ -35,9 +35,9 @@ async def post_api(request: Request):
     try:
         json = await request.json()
         await validate_post_data(json)
-    except Exception as e:
-        return JSONResponse(content={'error': 'JSON is not present'}, status_code=400)
     except ValidationException as e:
         return JSONResponse(content={'error': e.message}, status_code=422)
+    except Exception as e:
+        return JSONResponse(content={'error': 'JSON is not present'}, status_code=400)
 
     return JSONResponse(content={'status': 'OK'}, status_code=200)
