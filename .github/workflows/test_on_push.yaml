@@ -1,5 +1,6 @@
-name: Run tests on any Push event
-# Запуск при любом push евенте в любой ветке
+name: Run tests on push
+
+# Runs tests on any push in any branch
 on:
   push:
     branches:
@@ -8,18 +9,20 @@ jobs:
   run_tests:
     runs-on: [ubuntu-latest]
     steps:
-      # Чекаутим код
+      # Getting the code
       - uses: actions/checkout@v4
-      # Устанавливаем python нужной версии
+      # Install python
       - uses: actions/setup-python@v4
         with:
           python-version: '3.9'
       - name: Install requirements
-        # Устанавливаем зависимости
+        # Installing project and testing dependencies
         run: | 
           pip install -r fastapi/requirements.txt
           pip install coverage httpx
+        # Run tests
       - name: Run tests
         run: coverage run fastapi/tests.py
+        # Show coverage report
       - name: Tests report
         run: coverage report
