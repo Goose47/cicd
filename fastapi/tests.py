@@ -6,7 +6,7 @@ import json
 
 class FastapiTests(unittest.TestCase):
 
-    def __init__(self):
+    def setUp(self):
         self.app = TestClient(app)
 
     def test_get_hello_endpoint(self):
