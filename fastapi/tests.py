@@ -10,50 +10,60 @@ class FastapiTests(unittest.TestCase):
         self.app = TestClient(app)
 
     def test_get_hello_endpoint(self):
-        r = self.app.get('/')
-        self.assertEqual(r.data, b'Hello World!')
+        res = self.app.get('/')
+        self.assertEqual(res.data, b'Hello World!')
 
     def test_post_hello_endpoint(self):
-        r = self.app.post('/')
-        self.assertEqual(r.status_code, 405)
+        res = self.app.post('/')
+        self.assertEqual(res.status_code, 405)
 
     def test_get_api_endpoint(self):
-        r = self.app.get('/api')
-        self.assertEqual(r.json, {'status': 'test'})
+        res = self.app.get('/api')
+        self.assertEqual(res.json, {'status': 'test'})
 
     def test_correct_post_api_endpoint(self):
-        r = self.app.post('/api',
-                          content_type='application/json',
-                          data=json.dumps({'name': 'Den', 'age': 100}))
-        self.assertEqual(r.json, {'status': 'OK'})
-        self.assertEqual(r.status_code, 200)
+        res = self.app.post(
+            '/api',
+            headers={'Content-Type': 'application/json'},
+            json={'name': 'Den', 'age': 100}
+        )
+        self.assertEqual(res.json, {'status': 'OK'})
+        self.assertEqual(res.status_code, 200)
 
-        r = self.app.post('/api',
-                          content_type='application/json',
-                          data=json.dumps({'name': 'Den'}))
-        self.assertEqual(r.json, {'status': 'OK'})
-        self.assertEqual(r.status_code, 200)
+        res = self.app.post(
+            '/api',
+            headers={'Content-Type': 'application/json'},
+            json={'name': 'Den'}
+        )
+        self.assertEqual(res.json, {'status': 'OK'})
+        self.assertEqual(res.status_code, 200)
 
     def test_not_dict_post_api_endpoint(self):
-        r = self.app.post('/api',
-                          content_type='application/json',
-                          data=json.dumps([{'name': 'Den'}]))
-        self.assertEqual(r.json, {'status': 'bad input'})
-        self.assertEqual(r.status_code, 400)
+        res = self.app.post(
+            '/api',
+            headers={'Content-Type': 'application/json'},
+            json=[{'name': 'Den'}]
+        )
+        self.assertEqual(res.json, {'error': 'JSON is not present'})
+        self.assertEqual(res.status_code, 400)
 
     def test_no_name_post_api_endpoint(self):
-        r = self.app.post('/api',
-                          content_type='application/json',
-                          data=json.dumps({'age': 100}))
-        self.assertEqual(r.json, {'status': 'bad input'})
-        self.assertEqual(r.status_code, 400)
+        res = self.app.post(
+            '/api',
+            headers={'Content-Type': 'application/json'},
+            json={'age': 100}
+        )
+        self.assertEqual(res.json, {'error': 'name field is required and must be of type string'})
+        self.assertEqual(res.status_code, 422)
 
     def test_bad_age_post_api_endpoint(self):
-        r = self.app.post('/api',
-                          content_type='application/json',
-                          data=json.dumps({'name': 'Den', 'age': '100'}))
-        self.assertEqual(r.json, {'status': 'bad input'})
-        self.assertEqual(r.status_code, 400)
+        res = self.app.post(
+            '/api',
+            headers={'Content-Type': 'application/json'},
+            json={'name': 'Den', 'age': '100'}
+        )
+        self.assertEqual(res.json(), {'error': 'age field must be of type int'})
+        self.assertEqual(res.status_code, 422)
 
 
 if __name__ == '__main__':
