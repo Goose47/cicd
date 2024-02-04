@@ -2,9 +2,8 @@ FROM python:3.6-alpine
 WORKDIR /app
 
 COPY ./requirements.txt requirements.txt
-RUN apt-get update && \
-    apt-get install -y build-essential && \
-    rm -rf /var/lib/apt/lists/* && \
+RUN apk update && \
+    apk add build-base && \
     pip install -r requirements.txt
 
 EXPOSE 8000
