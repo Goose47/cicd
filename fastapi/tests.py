@@ -11,7 +11,7 @@ class FastapiTests(unittest.TestCase):
 
     def test_get_hello_endpoint(self):
         res = self.app.get('/')
-        self.assertEqual(res.body, b'Hello World!')
+        self.assertEqual(res.content, b'Hello World!')
 
     def test_post_hello_endpoint(self):
         res = self.app.post('/')

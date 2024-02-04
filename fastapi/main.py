@@ -11,8 +11,6 @@ class ValidationException(Exception):
 
 
 async def validate_post_data(data: dict) -> bool:
-    if not isinstance(data, dict):
-        raise ValidationException('No json is present')
     if not data.get('name') or not isinstance(data['name'], str):
         raise ValidationException('name field is required and must be of type string')
     if data.get('age') and not isinstance(data['age'], int):
