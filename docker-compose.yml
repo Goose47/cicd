@@ -20,16 +20,16 @@ services:
       - ./certbot/conf:/etc/letsencrypt
       - ./certbot/www:/var/www/certbot
 
-  flask:
-    container_name: app_flask
+  fastapi:
+    container_name: app_fastapi
     restart: unless-stopped
     build:
-      context: ./flask
+      context: ./fastapi
       dockerfile: Dockerfile
     ports:
       - "5000:5000"
     volumes:
-      - ./flask:/var/www/app
+      - ./fastapi:/var/www/app
     networks:
       - app
   vue:
