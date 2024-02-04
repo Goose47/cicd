@@ -1,16 +1,22 @@
-from fastapi import FastAPI, HTTPException, Request
+from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 
 app = FastAPI()
 
 
+class ValidationException(Exception):
+    def __init__(self, message):
+        self.message = message
+        super().__init__(message)
+
+
 async def validate_post_data(data: dict) -> bool:
     if not isinstance(data, dict):
-        raise HTTPException(status_code=422, detail='No json is present')
+        raise ValidationException('No json is present')
     if not data.get('name') or not isinstance(data['name'], str):
-        raise HTTPException(status_code=422, detail='name field is required and must be of type string')
+        raise ValidationException('name field is required and must be of type string')
     if data.get('age') and not isinstance(data['age'], int):
-        raise HTTPException(status_code=422, detail='age field is required and must be of type int')
+        raise ValidationException('age field is required and must be of type int')
     return True
 
 
@@ -26,6 +32,12 @@ async def get_api():
 
 @app.post('/api')
 async def post_api(request: Request):
-    json = await request.json()
-    await validate_post_data(json)
+    try:
+        json = await request.json()
+        await validate_post_data(json)
+    except Exception as e:
+        return JSONResponse(content={'error': 'JSON is not present'}, status_code=400)
+    except ValidationException as e:
+        return JSONResponse(content={'error': e.message}, status_code=422)
+
     return JSONResponse(content={'status': 'OK'}, status_code=200)
