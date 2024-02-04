@@ -13,7 +13,7 @@ jobs:
       # Устанавливаем python нужной версии
       - uses: actions/setup-python@v4
         with:
-          python-version: '3.6'
+          python-version: '3.6.x'
       - name: Install requirements
         # Устанавливаем зависимости
         run: | 
