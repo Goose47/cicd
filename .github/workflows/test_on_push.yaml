@@ -20,6 +20,6 @@ jobs:
           pip install -r fastapi/requirements.txt
           pip install coverage
       - name: Run tests
-        run: coverage run src/tests.py
+        run: coverage run fastapi/tests.py
       - name: Tests report
         run: coverage report
