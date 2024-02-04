@@ -18,7 +18,7 @@ jobs:
         # Устанавливаем зависимости
         run: | 
           pip install -r fastapi/requirements.txt
-          pip install coverage
+          pip install coverage httpx
       - name: Run tests
         run: coverage run fastapi/tests.py
       - name: Tests report
