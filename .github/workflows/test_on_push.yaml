@@ -18,7 +18,6 @@ jobs:
         # Устанавливаем зависимости
         run: | 
           pip install -r fastapi/requirements.txt
-          pip install
       - name: Test with pytest
         run: |
           pip install pytest pytest-cov
