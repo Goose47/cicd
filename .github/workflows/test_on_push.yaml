@@ -30,6 +30,7 @@ jobs:
   deploy:
     # Runs if tests passed
     needs: 'run_tests'
+    runs-on: [ubuntu-latest]
     # Runs if commit is pushed to main
     if: github.ref == 'refs/heads/main'
     steps:
