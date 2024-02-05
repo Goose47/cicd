@@ -40,3 +40,5 @@ async def post_api(request: Request):
 
     return JSONResponse(content={'status': 'OK'}, status_code=200)
 
+def kek():
+    pass
