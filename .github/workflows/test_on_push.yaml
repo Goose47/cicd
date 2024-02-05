@@ -48,5 +48,7 @@ jobs:
           private_key: ${{secrets.SSH_PRIVATE_KEY}}
           command: |
             cd ${{ secrets.PROJECT_FOLDER }};
-            echo hahahahah;
-            touch kekeke;
+            git pull;
+            docker compose build;
+            docker compose down;
+            docker compose up -d;
