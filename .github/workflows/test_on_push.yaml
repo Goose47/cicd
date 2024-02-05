@@ -26,3 +26,26 @@ jobs:
         # Show coverage report
       - name: Tests report
         run: coverage report
+
+  deploy:
+    # Runs if tests passed
+    needs: 'run_tests'
+    # Runs if commit is pushed to main
+    if: github.ref == 'refs/heads/main'
+    steps:
+#      - name: Checkout code
+#        uses: actions/checkout@v3
+#      - name: Install Ruby and gems
+#        uses: ruby/setup-ruby@ee2113536afb7f793eed4ce60e8d3b26db912da4 # v1.127.0
+#        with:
+#          bundler-cache: true
+      - name: Run command on remote server
+        uses: D3rHase/ssh-command-action@v0.2.2
+        with:
+          host: ${{secrets.SSH_HOST}}
+          user: ${{secrets.SSH_USER}}
+          private_key: ${{secrets.SSH_PRIVATE_KEY}}
+          command: |
+            cd ${{ secrets.PROJECT_FOLDER }}
+            echo hahahahah
+            touch kekeke
