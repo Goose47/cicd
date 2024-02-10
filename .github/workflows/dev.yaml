@@ -42,7 +42,13 @@ jobs:
       - uses: actions/checkout@v4
       # Building the image with tag {branch_name}
       - name: Build image
-        run: docker build -t "$LOGIN/$NAME:${GITHUB_REF:11}" -f ./fastapi/Dockerfile .
+        run: echo ${GITHUB_REF:11}
+      - name: Build image
+        run: echo $LOGIN
+      - name: Build image
+        run: echo $NAME
+      - name: Build image
+        run: docker build -t $LOGIN/$NAME:${GITHUB_REF:11} -f ./fastapi/Dockerfile .
       # Push to docker hub with tag {branch_name}
       - name: Push image to docker.io
         run: docker push $LOGIN/$NAME:${GITHUB_REF:11}
