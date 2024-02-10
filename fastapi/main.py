@@ -39,11 +39,3 @@ async def post_api(request: Request):
         return JSONResponse(content={'error': 'JSON is not present'}, status_code=400)
 
     return JSONResponse(content={'status': 'OK'}, status_code=200)
-
-
-#  todo reject main push if tests failed
-
-#  todo disable email notifications
-#  todo do smth with db
-#  todo certificates (automating??)
-#  todo docker healthcheck???
