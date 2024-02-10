@@ -1,0 +1,41 @@
+name: Prod
+
+# Runs tests on any push in any branch
+on:
+  push:
+    branches:
+      - 'main'
+jobs:
+  push-docker:
+    runs-on: [ubuntu-latest]
+    needs: 'test'
+    steps:
+      # Logging in to docker hub
+      - name: Login to docker.io
+        run: echo ${{ secrets.DOCKER_PWD }} | docker login -u ${{ secrets.DOCKER_LOGIN }} --password-stdin
+      # Getting the code
+      - uses: actions/checkout@v4
+      # Building the image with tag {tag_name}
+      - name: Build image
+        run: docker build -t ${{ secrets.DOCKER_LOGIN }}/${{ secrets.DOCKER_NAME }}:${GITHUB_REF:11} -f ./fastapi/Dockerfile .
+      # Push to docker hub with tag {tag_name}
+      - name: Push image to docker.io
+        run: docker push ${{ secrets.DOCKER_LOGIN }}/${{ secrets.DOCKER_NAME }}:${GITHUB_REF:11}
+
+  deploy-ssh:
+    # Runs if docker image is pushed
+    needs: 'push-docker'
+    runs-on: [ubuntu-latest]
+    steps:
+      - name: Run command on remote server
+        uses: D3rHase/ssh-command-action@v0.2.2
+        with:
+          host: ${{secrets.SSH_PROD_HOST}}
+          user: ${{secrets.SSH_PROD_USER}}
+          private_key: ${{secrets.SSH_PROD_PRIVATE_KEY}}
+          command: |
+            cd ${{ secrets.PROD_PROJECT_FOLDER }};
+            git pull;
+            docker compose build;
+            docker compose down;
+            docker compose up -d;
