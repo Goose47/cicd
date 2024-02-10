@@ -18,6 +18,7 @@ jobs:
         # Installing project and testing dependencies
         run: | 
           pwd
+          ls
           pip install -r fastapi/requirements.txt
           pip install coverage httpx
         # Run tests
