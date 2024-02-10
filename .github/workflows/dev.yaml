@@ -32,7 +32,7 @@ jobs:
     runs-on: [ubuntu-latest]
     needs: 'test'
     env:
-      LOGIN: ${{ secrets.DOCKER_LOGIN }}
+      USERNAME: ${{ secrets.DOCKER_USERNAME }}
       NAME: ${{ secrets.DOCKER_NAME }}
     steps:
       # Logging in to docker hub
@@ -48,10 +48,10 @@ jobs:
       - name: Build image
         run: echo $NAME
       - name: Build image
-        run: docker build -t $LOGIN/$NAME:${GITHUB_REF:11} -f ./fastapi/Dockerfile .
+        run: docker build -t $USERNAME/$NAME:${GITHUB_REF:11} -f ./fastapi/Dockerfile .
       # Push to docker hub with tag {branch_name}
       - name: Push image to docker.io
-        run: docker push $LOGIN/$NAME:${GITHUB_REF:11}
+        run: docker push $USERNAME/$NAME:${GITHUB_REF:11}
 
   deploy-ssh:
     # Runs if docker image is pushed
