@@ -10,6 +10,8 @@ jobs:
   test:
     runs-on: [ubuntu-latest]
     steps:
+      # Getting the code
+      - uses: actions/checkout@v4
       # Install python
       - uses: actions/setup-python@v4
         with:
@@ -17,7 +19,7 @@ jobs:
       - name: Install requirements
         # Installing project and testing dependencies
         run: | 
-          pip install -r ./fastapi/requirements.txt
+          pip install -r fastapi/requirements.txt
           pip install coverage httpx
         # Run tests
       - name: Run tests
