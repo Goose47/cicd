@@ -17,6 +17,7 @@ jobs:
       - name: Install requirements
         # Installing project and testing dependencies
         run: | 
+          pwd
           pip install -r fastapi/requirements.txt
           pip install coverage httpx
         # Run tests
