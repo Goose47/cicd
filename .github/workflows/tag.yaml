@@ -1,4 +1,4 @@
-name: Prod
+name: Tag
 
 # Push to docker hub when tag is pushed
 on:

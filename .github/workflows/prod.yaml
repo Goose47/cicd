@@ -31,6 +31,7 @@ jobs:
     # Runs if docker image is pushed
     needs: 'test'
     runs-on: [ubuntu-latest]
+    environment: must-review
     steps:
       - name: Run command on remote server
         uses: D3rHase/ssh-command-action@v0.2.2
