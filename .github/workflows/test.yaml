@@ -1,0 +1,13 @@
+name: kekekek
+
+# Runs tests on any push in any branch
+on:
+  push:
+    branches:
+      - '*'
+jobs:
+  run_tests:
+    runs-on: [ubuntu-latest]
+    steps:
+      # Getting the code
+      - uses: actions/checkout@v4
